@@ -9,16 +9,45 @@ import {
     Typography
 } from "@mui/material";
 import {AccountCircleOutlined} from "@mui/icons-material";
+import userService from "../app/services/userService";
+import {LoginModel} from "../app/models/loginModel";
+import commonService from "../app/services/commonService";
+import {toast} from "react-toastify";
 
 export default function LoginComponent() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+
         console.log({
-            email: data.get('email'),
+            username: data.get('username'),
             password: data.get('password'),
         });
-    };
+
+        const username = data.get('username');
+        const password = data.get('password');
+
+        if (!username || !password) {
+            toast.error('Please complete all fields');
+            return;
+        }
+
+        var loginModel: LoginModel = {
+            username: data.get('username')!.toString(),
+            password: data.get('password')!.toString()
+        }
+
+        try {
+            userService.login(loginModel).then(() => {
+                if (commonService.getToken()) {
+                    // Close modal
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
     
     return (
         <Container maxWidth="xs">
