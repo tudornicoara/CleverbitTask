@@ -41,7 +41,8 @@ export default function LoginComponent() {
         try {
             userService.login(loginModel).then(() => {
                 if (commonService.getToken()) {
-                    // Close modal
+                    // todo: Close modal
+                    toast.success('Logged in');
                 }
             });
         } catch (e) {

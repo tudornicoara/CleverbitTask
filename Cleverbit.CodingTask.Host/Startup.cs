@@ -32,12 +32,20 @@ namespace Cleverbit.CodingTask.Host
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<IHashService>(new HashService(configuration.GetSection("HashSalt").Get<string>()));
-            services.AddSingleton<IMatchService, MatchService>();
+            // services.AddSingleton<IMatchService, MatchService>();
 
             services.AddControllers();
 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +64,8 @@ namespace Cleverbit.CodingTask.Host
             });
 
             app.UseRouting();
+            
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
