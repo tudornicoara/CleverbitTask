@@ -8,7 +8,7 @@
 
 3. In directory `Cleverbit.CodingTask\Cleverbit.CodingTask.Host` run `dotnet run`
 
-4. Switch terminals
+4. Switch terminal
 
 5. In directory `Cleverbit.CodingTask\client` run `npm install`
 
